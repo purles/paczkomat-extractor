@@ -116,8 +116,8 @@
     <div class="container">
         <h1>🚚 Ekstrator numerów paczkomatów</h1>
         
-        <div class="instruction">
-            <strong>Instrukcja:</strong> Wklej dane z kolumny D (lub całe wiersze) w pole poniżej. Narzędzie automatycznie wyciągnie wszystkie numery paczkomatów.
+                    <div class="instruction">
+            <strong>Instrukcja:</strong> Wklej dane z kolumny D (lub całe wiersze) w pole poniżej. Narzędzie wyciągnie numery paczkomatów <strong>zachowując kolejność i ilość linii</strong> - każda linia inputu = jedna linia outputu.
         </div>
         
         <div class="input-section">
@@ -150,26 +150,34 @@ paczkomat CRC01M, +48123456789 drugi@przykład.pl
                 return;
             }
             
-            // Regex do wyszukiwania numerów paczkomatów
-            // Szuka wzorców: litery + cyfry + końcówki (M, N, A, H, E, APP, ML, itp.)
-            const paczkomatRegex = /\b[A-Z]{2,4}[0-9]{1,4}[A-Z]*(?:APP|ML|[MNAHEFT])\b/g;
+            const lines = input.split('\n');
+            const results = [];
+            let totalFound = 0;
             
-            const matches = input.match(paczkomatRegex);
+            lines.forEach(line => {
+                // Szukaj wzorca: "paczkomat [NAZWA],"
+                const match = line.match(/paczkomat\s+([A-Z0-9-]+[A-Z0-9]),/i);
+                
+                if (match) {
+                    results.push(match[1]); // [1] to pierwsza grupa w nawiasach
+                    totalFound++;
+                } else {
+                    // Jeśli nie ma paczkomatu w linii, dodaj pustą linię żeby zachować kolejność
+                    results.push('');
+                }
+            });
             
-            if (matches) {
-                // Usuń duplikaty i posortuj
-                const uniqueNumbers = [...new Set(matches)].sort();
-                
-                // Wyświetl jako lista (każdy w nowej linii)
-                output.value = uniqueNumbers.join('\n');
-                
-                // Pokaż statystyki
-                stats.textContent = `Znaleziono ${uniqueNumbers.length} unikalnych paczkomatów (z ${matches.length} wszystkich wystąpień)`;
+            // Wyświetl wyniki - każda linia inputu = jedna linia outputu
+            output.value = results.join('\n');
+            
+            // Pokaż statystyki
+            if (totalFound > 0) {
+                stats.textContent = `Znaleziono ${totalFound} paczkomatów w ${lines.length} liniach`;
                 stats.style.display = 'block';
                 copyBtn.style.display = 'block';
             } else {
-                output.value = 'Nie znaleziono numerów paczkomatów!';
-                stats.style.display = 'none';
+                stats.textContent = 'Nie znaleziono żadnych paczkomatów!';
+                stats.style.display = 'block';
                 copyBtn.style.display = 'none';
             }
         }
@@ -200,9 +208,10 @@ paczkomat CRC01M, +48123456789 drugi@przykład.pl
         // Test z przykładowymi danymi
         window.onload = function() {
             const testData = `#wiosna2025 paczkomat WOD03N,  123456789 przykład@email.com
-paczkomat CRC01M,  +48123456789 drugi@przykład.pl
+paczkomat POP-WAW384,  +48123456789 drugi@przykład.pl
 paczkomat GDA17A,  987654321 trzeci@test.pl
-#szalenstwo paczkomat LOD07APP,  111222333 czwarty@przykład.com`;
+#szalenstwo paczkomat LOD07APP,  111222333 czwarty@przykład.com
+paczkomat WAW137AP,  555666777 piąty@test.pl`;
             
             document.getElementById('input').value = testData;
             extractPackageNumbers();
