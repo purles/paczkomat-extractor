@@ -155,8 +155,8 @@ paczkomat CRC01M, +48123456789 drugi@przykład.pl
             let totalFound = 0;
             
             lines.forEach(line => {
-                // Szukaj wzorca: "paczkomat [NAZWA],"
-                const match = line.match(/paczkomat\s+([A-Z0-9-]+[A-Z0-9]),/i);
+                // Szukaj wzorca: "paczkomat [NAZWA]" - kończy się przecinkiem ALBO spacją
+                const match = line.match(/paczkomat\s+([A-Z0-9-]+)(?:,|\s)/i);
                 
                 if (match) {
                     results.push(match[1]); // [1] to pierwsza grupa w nawiasach
@@ -209,9 +209,9 @@ paczkomat CRC01M, +48123456789 drugi@przykład.pl
         window.onload = function() {
             const testData = `#wiosna2025 paczkomat WOD03N,  123456789 przykład@email.com
 paczkomat POP-WAW384,  +48123456789 drugi@przykład.pl
-paczkomat GDA17A,  987654321 trzeci@test.pl
+paczkomat XPZ01M 722282480 trzeci@test.pl
 #szalenstwo paczkomat LOD07APP,  111222333 czwarty@przykład.com
-paczkomat WAW137AP,  555666777 piąty@test.pl`;
+paczkomat BRZ01M 555666777 piąty@test.pl`;
             
             document.getElementById('input').value = testData;
             extractPackageNumbers();
