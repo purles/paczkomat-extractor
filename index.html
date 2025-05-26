@@ -114,10 +114,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>🚚 Ekstrator numerów paczkomatów</h1>
+	<img src="https://purles.pl/wp-content/uploads/2022/04/logo.png" alt="Purles Logo" class="logo" height="50px" align="center">
+        <h1>Ekstrator numerów paczkomatów</h1>
         
                     <div class="instruction">
-            <strong>Instrukcja:</strong> Wklej dane z kolumny D (lub całe wiersze) w pole poniżej. Narzędzie wyciągnie numery paczkomatów <strong>zachowując kolejność i ilość linii</strong> - każda linia inputu = jedna linia outputu.
+            <strong>Instrukcja:</strong> Wklej dane z numerami paczkomawót poniżej.<br>Narzędzie wyciągnie numery paczkomatów <strong>zachowując kolejność i ilość linii</strong> - każda linia inputu = jedna linia outputu.
         </div>
         
         <div class="input-section">
@@ -137,7 +138,9 @@ paczkomat CRC01M, +48123456789 drugi@przykład.pl
             <div id="stats" class="stats" style="display: none;"></div>
         </div>
     </div>
-
+   <p style="text-align: center; color: #8B5CF6;">
+ Designed by KS for <strong><a href="https://www.purles.pl" style="color: #8B5CF6; text-decoration: none;">Purlés</a></strong>
+</p>
     <script>
         function extractPackageNumbers() {
             const input = document.getElementById('input').value;
